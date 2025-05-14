@@ -1,0 +1,102 @@
+<div class="p-6 bg-gray-100 min-h-screen">
+  <!-- Encabezado -->
+  <h2 class="text-3xl font-bold text-gray-800 mb-6">Gestión de Vehículos</h2>
+
+  <!-- Botón para agregar vehículo -->
+  <button mat-raised-button color="primary" (click)="openVehicleDialog()" class="mb-6">
+    <mat-icon class="mr-2">add</mat-icon> Agregar Vehículo
+  </button>
+
+  <!-- Formulario para crear/editar vehículos -->
+  <form [formGroup]="vehicleForm" (ngSubmit)="saveVehicle()" class="mb-8 bg-white p-6 rounded-lg shadow-md flex flex-col gap-4 max-w-lg">
+    <mat-form-field appearance="outline">
+      <mat-label>Marca</mat-label>
+      <input matInput formControlName="marca" placeholder="Ingrese la marca" />
+      <mat-error *ngIf="vehicleForm.get('marca')?.hasError('required')">La marca es obligatoria</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Modelo</mat-label>
+      <input matInput formControlName="modelo" placeholder="Ingrese el modelo" />
+      <mat-error *ngIf="vehicleForm.get('modelo')?.hasError('required')">El modelo es obligatorio</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Año</mat-label>
+      <input matInput formControlName="anio" type="number" placeholder="Ej: 2023" />
+      <mat-error *ngIf="vehicleForm.get('anio')?.hasError('required')">El año es obligatorio</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Características</mat-label>
+      <input matInput formControlName="caracteristicas" placeholder="Ej: 4 puertas, automático" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Estado</mat-label>
+      <input matInput formControlName="estado" placeholder="Ej: Disponible, Vendido" />
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit" class="w-full">
+      {{ editMode ? 'Actualizar Vehículo' : 'Crear Vehículo' }}
+    </button>
+  </form>
+
+  <!-- Tabla de vehículos -->
+  <div class="bg-white rounded-lg shadow-md overflow-x-auto">
+    <mat-table [dataSource]="vehicles" class="w-full">
+      <!-- Columna ID -->
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef class="bg-gray-200 text-gray-700 font-semibold">ID</mat-header-cell>
+        <mat-cell *matCellDef="let vehicle" class="text-gray-600">{{vehicle.id}}</mat-cell>
+      </ng-container>
+
+      <!-- Columna Marca -->
+      <ng-container matColumnDef="marca">
+        <mat-header-cell *matHeaderCellDef class="bg-gray-200 text-gray-700 font-semibold">Marca</mat-header-cell>
+        <mat-cell *matCellDef="let vehicle" class="text-gray-600">{{vehicle.marca}}</mat-cell>
+      </ng-container>
+
+      <!-- Columna Modelo -->
+      <ng-container matColumnDef="modelo">
+        <mat-header-cell *matHeaderCellDef class="bg-gray-200 text-gray-700 font-semibold">Modelo</mat-header-cell>
+        <mat-cell *matCellDef="let vehicle" class="text-gray-600">{{vehicle.modelo}}</mat-cell>
+      </ng-container>
+
+      <!-- Columna Año -->
+      <ng-container matColumnDef="anio">
+        <mat-header-cell *matHeaderCellDef class="bg-gray-200 text-gray-700 font-semibold">Año</mat-header-cell>
+        <mat-cell *matCellDef="let vehicle" class="text-gray-600">{{vehicle.anio}}</mat-cell>
+      </ng-container>
+
+      <!-- Columna Características -->
+      <ng-container matColumnDef="caracteristicas">
+        <mat-header-cell *matHeaderCellDef class="bg-gray-200 text-gray-700 font-semibold">Características</mat-header-cell>
+        <mat-cell *matCellDef="let vehicle" class="text-gray-600">{{vehicle.caracteristicas}}</mat-cell>
+      </ng-container>
+
+      <!-- Columna Estado -->
+      <ng-container matColumnDef="estado">
+        <mat-header-cell *matHeaderCellDef class="bg-gray-200 text-gray-700 font-semibold">Estado</mat-header-cell>
+        <mat-cell *matCellDef="let vehicle" class="text-gray-600">{{vehicle.estado}}</mat-cell>
+      </ng-container>
+
+      <!-- Columna Acciones -->
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef class="bg-gray-200 text-gray-700 font-semibold">Acciones</mat-header-cell>
+        <mat-cell *matCellDef="let vehicle">
+          <button mat-icon-button color="primary" (click)="openVehicleDialog(vehicle)" class="hover:bg-blue-100">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteVehicle(vehicle.id)" class="hover:bg-red-100">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <!-- Filas de la tabla -->
+      <mat-header-row *matHeaderRowDef="displayedColumns" class="border-b"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;" class="hover:bg-gray-50 border-b"></mat-row>
+    </mat-table>
+  </div>
+</div>
